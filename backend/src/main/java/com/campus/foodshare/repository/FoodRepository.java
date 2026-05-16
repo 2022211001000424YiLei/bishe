@@ -24,7 +24,7 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     @Query("SELECT f FROM Food f WHERE f.category = :category")
     Page<Food> findByCategory(@Param("category") String category, Pageable pageable);
 
-    @Query("SELECT f FROM Food f WHERE f.title LIKE %:keyword% OR f.description LIKE %:keyword%")
+    @Query("SELECT f FROM Food f WHERE f.title LIKE %:keyword% OR f.description LIKE %:keyword% OR f.location LIKE %:keyword%")
     Page<Food> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT f FROM Food f ORDER BY f.likeCount DESC")
@@ -42,9 +42,12 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     @Query("SELECT f FROM Food f WHERE f.status = 'APPROVED' ORDER BY f.likeCount DESC")
     List<Food> findTopByLikesApproved(Pageable pageable);
 
-    @Query("SELECT f FROM Food f WHERE f.status = 'APPROVED' AND (f.title LIKE %:keyword% OR f.description LIKE %:keyword%)")
+    @Query("SELECT f FROM Food f WHERE f.status = 'APPROVED' AND (f.title LIKE %:keyword% OR f.description LIKE %:keyword% OR f.location LIKE %:keyword%)")
     Page<Food> searchApproved(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT f FROM Food f WHERE f.status = 'APPROVED' AND f.category = :category")
     Page<Food> findApprovedByCategory(@Param("category") String category, Pageable pageable);
+
+    @Query("SELECT f FROM Food f WHERE f.status = 'APPROVED' AND f.tags LIKE %:tag%")
+    Page<Food> findApprovedByTag(@Param("tag") String tag, Pageable pageable);
 }

@@ -12,5 +12,7 @@ public class FoodRequest {
     private String imageUrl;
     private String location;
     private String category;
+    private String tags;
     private Double price;
+    private Long shopId;
 }

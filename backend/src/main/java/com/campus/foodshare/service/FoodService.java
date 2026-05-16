@@ -18,6 +18,7 @@ import java.util.List;
 public class FoodService {
     private final FoodRepository foodRepository;
     private final UserRepository userRepository;
+    private final ShopRepository shopRepository;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final FavoriteRepository favoriteRepository;
@@ -33,8 +34,15 @@ public class FoodService {
         food.setImageUrl(request.getImageUrl());
         food.setLocation(request.getLocation());
         food.setCategory(request.getCategory());
+        food.setTags(request.getTags());
         food.setPrice(request.getPrice());
         food.setUser(user);
+
+        if (request.getShopId() != null) {
+            Shop shop = shopRepository.findById(request.getShopId())
+                    .orElseThrow(() -> new RuntimeException("店铺不存在"));
+            food.setShop(shop);
+        }
 
         return FoodResponse.fromEntity(foodRepository.save(food));
     }
@@ -53,17 +61,19 @@ public class FoodService {
         if (request.getImageUrl() != null) food.setImageUrl(request.getImageUrl());
         if (request.getLocation() != null) food.setLocation(request.getLocation());
         if (request.getCategory() != null) food.setCategory(request.getCategory());
+        if (request.getTags() != null) food.setTags(request.getTags());
         if (request.getPrice() != null) food.setPrice(request.getPrice());
 
         return FoodResponse.fromEntity(foodRepository.save(food));
     }
 
     @Transactional
-    public void deleteFood(Long foodId, Long userId) {
+    public void deleteFood(Long foodId, Long userId, String role) {
         Food food = foodRepository.findById(foodId)
                 .orElseThrow(() -> new RuntimeException("美食不存在"));
 
-        if (!food.getUser().getId().equals(userId)) {
+        // 非管理员需要检查权限
+        if (!"ADMIN".equals(role) && !food.getUser().getId().equals(userId)) {
             throw new RuntimeException("无权限删除");
         }
 
@@ -123,6 +133,19 @@ public class FoodService {
     public Page<FoodResponse> getFoodsByCategory(String category, int page, int size, Long currentUserId) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "likeCount", "createdAt"));
         Page<Food> foods = foodRepository.findApprovedByCategory(category, pageable);
+        return foods.map(food -> {
+            FoodResponse response = FoodResponse.fromEntity(food);
+            if (currentUserId != null) {
+                response.setLiked(likeRepository.existsByUserIdAndFoodId(currentUserId, food.getId()));
+                response.setFavorited(favoriteRepository.existsByUserIdAndFoodId(currentUserId, food.getId()));
+            }
+            return response;
+        });
+    }
+
+    public Page<FoodResponse> getFoodsByTag(String tag, int page, int size, Long currentUserId) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "likeCount", "createdAt"));
+        Page<Food> foods = foodRepository.findApprovedByTag(tag, pageable);
         return foods.map(food -> {
             FoodResponse response = FoodResponse.fromEntity(food);
             if (currentUserId != null) {

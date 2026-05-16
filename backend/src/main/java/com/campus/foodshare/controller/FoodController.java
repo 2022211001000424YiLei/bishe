@@ -38,7 +38,7 @@ public class FoodController {
     public ResponseEntity<Void> deleteFood(
             @PathVariable Long id,
             @AuthenticationPrincipal User user) {
-        foodService.deleteFood(id, user.getId());
+        foodService.deleteFood(id, user.getId(), user.getRole());
         return ResponseEntity.ok().build();
     }
 
@@ -77,6 +77,16 @@ public class FoodController {
             @AuthenticationPrincipal User user) {
         Long currentUserId = user != null ? user.getId() : null;
         return ResponseEntity.ok(foodService.getFoodsByCategory(category, page, size, currentUserId));
+    }
+
+    @GetMapping("/tag/{tag}")
+    public ResponseEntity<Page<FoodResponse>> getFoodsByTag(
+            @PathVariable String tag,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @AuthenticationPrincipal User user) {
+        Long currentUserId = user != null ? user.getId() : null;
+        return ResponseEntity.ok(foodService.getFoodsByTag(tag, page, size, currentUserId));
     }
 
     @GetMapping("/user/{userId}")

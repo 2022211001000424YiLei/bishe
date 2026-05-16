@@ -59,7 +59,7 @@
       </div>
     </nav>
     <router-view />
-    <AIChatWidget v-if="state.token && state.token !== 'visitor'" />
+    <AIChatWidget v-if="state.token && state.token !== 'visitor' && state.role === 'USER'" />
   </div>
 </template>
 
@@ -74,7 +74,7 @@ const route = useRoute()
 const { state, clearAuth } = useAuth()
 const searchKeyword = ref('')
 
-const isLoginPage = computed(() => ['/', '/login', '/register', '/home'].includes(route.path))
+const isLoginPage = computed(() => ['/', '/login', '/register', '/home', '/admin'].includes(route.path))
 
 const logout = () => {
   clearAuth()

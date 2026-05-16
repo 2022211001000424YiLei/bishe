@@ -12,6 +12,7 @@ public class FoodResponse {
     private String imageUrl;
     private String location;
     private String category;
+    private String tags;
     private Double price;
     private Double rating;
     private Integer likeCount;
@@ -23,6 +24,8 @@ public class FoodResponse {
     private Boolean liked;
     private Boolean favorited;
     private LocalDateTime createdAt;
+    private Long shopId;
+    private String shopName;
 
     public static FoodResponse fromEntity(Food food) {
         FoodResponse response = new FoodResponse();
@@ -32,6 +35,7 @@ public class FoodResponse {
         response.setImageUrl(food.getImageUrl());
         response.setLocation(food.getLocation());
         response.setCategory(food.getCategory());
+        response.setTags(food.getTags());
         response.setPrice(food.getPrice());
         response.setRating(food.getRating());
         response.setLikeCount(food.getLikeCount());
@@ -41,6 +45,10 @@ public class FoodResponse {
         response.setUsername(food.getUser().getUsername());
         response.setUserAvatar(food.getUser().getAvatar());
         response.setCreatedAt(food.getCreatedAt());
+        if (food.getShop() != null) {
+            response.setShopId(food.getShop().getId());
+            response.setShopName(food.getShop().getName());
+        }
         return response;
     }
 }

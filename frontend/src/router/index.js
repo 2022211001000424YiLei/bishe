@@ -55,6 +55,11 @@ const routes = [
     component: () => import('../views/Category.vue')
   },
   {
+    path: '/tag/:tag',
+    name: 'Tag',
+    component: () => import('../views/Tag.vue')
+  },
+  {
     path: '/admin',
     name: 'Admin',
     component: () => import('../views/Admin.vue'),
@@ -79,7 +84,7 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.requiresAuth && !token) {
     next('/login')
-  } else if (to.meta.requiresAdmin && role !== 'ADMIN') {
+  } else if (to.meta.requiresAdmin && role !== 'ADMIN' && role !== 'MERCHANT') {
     next('/')
   } else {
     next()

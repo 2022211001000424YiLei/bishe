@@ -7,12 +7,24 @@
       <div class="container">
         <router-link class="navbar-brand" to="/home">🍜 校园美食</router-link>
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><router-link class="nav-link" to="/home">首页</router-link></li>
-          <li class="nav-item"><router-link class="nav-link" to="/create">发布美食</router-link></li>
-          <li class="nav-item"><router-link class="nav-link" to="/favorites">收藏</router-link></li>
-          <li class="nav-item"><router-link class="nav-link" to="/profile">我的</router-link></li>
-          <li class="nav-item"><router-link class="nav-link" to="/admin" v-if="isAdmin">管理</router-link></li>
-          <li class="nav-item"><a class="nav-link" href="#" @click.prevent="logout">退出</a></li>
+          <!-- 商家菜单 -->
+          <template v-if="isMerchant">
+            <li class="nav-item"><router-link class="nav-link" to="/admin">店铺管理</router-link></li>
+            <li class="nav-item"><a class="nav-link" href="#" @click.prevent="logout">退出</a></li>
+          </template>
+          <!-- 管理员菜单 -->
+          <template v-else-if="isAdmin">
+            <li class="nav-item"><router-link class="nav-link" to="/admin">管理</router-link></li>
+            <li class="nav-item"><a class="nav-link" href="#" @click.prevent="logout">退出</a></li>
+          </template>
+          <!-- 普通用户菜单 -->
+          <template v-else>
+            <li class="nav-item"><router-link class="nav-link" to="/home">首页</router-link></li>
+            <li class="nav-item"><router-link class="nav-link" to="/create">发布美食</router-link></li>
+            <li class="nav-item"><router-link class="nav-link" to="/favorites">收藏</router-link></li>
+            <li class="nav-item"><router-link class="nav-link" to="/profile">我的</router-link></li>
+            <li class="nav-item"><a class="nav-link" href="#" @click.prevent="logout">退出</a></li>
+          </template>
         </ul>
       </div>
     </nav>
@@ -46,7 +58,7 @@
       <div class="mb-4">
         <div class="row justify-content-center">
           <div class="col-md-3 col-6 mb-3" v-for="category in categories" :key="category.name">
-            <router-link :to="'/category/' + category.name" class="text-decoration-none">
+            <router-link :to="'/tag/' + category.name" class="text-decoration-none">
               <div class="card category-card" :style="{ background: category.color }">
                 <div class="card-body text-white text-center">
                   <h3>{{ category.icon }}</h3>
@@ -55,6 +67,19 @@
               </div>
             </router-link>
           </div>
+        </div>
+      </div>
+
+      <!-- 搜索栏 -->
+      <div class="search-bar-wrapper">
+        <div class="home-search-bar">
+          <input
+            type="text"
+            v-model="searchKeyword"
+            placeholder="搜索美食..."
+            @keyup.enter="doSearch"
+          >
+          <button @click="doSearch">🔍</button>
         </div>
       </div>
 
@@ -166,12 +191,21 @@ const page = ref(0)
 const totalPages = ref(0)
 const currentSlide = ref(0)
 const showMenu = ref(false)
+const searchKeyword = ref('')
+
+const doSearch = () => {
+  if (searchKeyword.value.trim()) {
+    router.push({ path: '/search', query: { keyword: searchKeyword.value } })
+    searchKeyword.value = ''
+  }
+}
 
 const toggleMenu = () => {
   showMenu.value = !showMenu.value
 }
 
 const isAdmin = computed(() => state.role === 'ADMIN')
+const isMerchant = computed(() => state.role === 'MERCHANT')
 
 const logout = () => {
   clearAuth()
@@ -180,8 +214,8 @@ const logout = () => {
 }
 
 const heroSlides = [
-  { image: 'https://java-abcde.oss-cn-beijing.aliyuncs.com/e10891d3-a0f8-4fd0-957e-4068e436da3c.jpg', title: '发现校园美食', subtitle: '分享美味，发现美食' },
-  { image: 'https://java-abcde.oss-cn-beijing.aliyuncs.com/cat-in-space-y5.jpg', title: '美食推荐', subtitle: '精选校园美食' }
+  { image: 'https://java-abcde.oss-cn-beijing.aliyuncs.com/1686903314791843.png', title: '发现校园美食', subtitle: '分享美味，发现美食' },
+  { image: 'https://java-abcde.oss-cn-beijing.aliyuncs.com/8953.jpg_wh860.jpg', title: '美食推荐', subtitle: '精选校园美食' }
 ]
 
 let slideTimer = null
@@ -499,6 +533,46 @@ onUnmounted(() => {
 .category-card:hover {
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.search-bar-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.home-search-bar {
+  display: flex;
+  background: white;
+  border-radius: 30px;
+  padding: 6px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  width: 100%;
+  max-width: 500px;
+}
+
+.home-search-bar input {
+  flex: 1;
+  border: none;
+  padding: 10px 20px;
+  font-size: 15px;
+  outline: none;
+  border-radius: 30px;
+  background: transparent;
+}
+
+.home-search-bar button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 24px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.home-search-bar button:hover {
+  opacity: 0.9;
 }
 
 .section-title {

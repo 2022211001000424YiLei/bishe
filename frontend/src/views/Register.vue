@@ -2,7 +2,7 @@
   <div class="login-page">
     <div class="login-card">
       <div class="login-image">
-        <img src="https://java-abcde.oss-cn-beijing.aliyuncs.com/e10891d3-a0f8-4fd0-957e-4068e436da3c.jpg" alt="校园美食">
+        <img src="https://java-abcde.oss-cn-beijing.aliyuncs.com/90.jpg" alt="校园美食">
         <div class="login-image-overlay">
           <h2>校园美食分享网</h2>
           <p>加入我们，分享美味</p>
@@ -72,7 +72,7 @@ const handleRegister = async () => {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: linear-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0.35)), url('/images/bg2.jpg');
+  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://java-abcde.oss-cn-beijing.aliyuncs.com/90.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

@@ -27,6 +27,7 @@ export const foodAPI = {
   delete: (id) => api.delete(`/foods/${id}`),
   search: (keyword, page = 0, size = 10) => api.get(`/foods/search?keyword=${keyword}&page=${page}&size=${size}`),
   getByCategory: (category, page = 0, size = 10) => api.get(`/foods/category/${category}?page=${page}&size=${size}`),
+  getByTag: (tag, page = 0, size = 10) => api.get(`/foods/tag/${tag}?page=${page}&size=${size}`),
   getUserFoods: (userId, page = 0, size = 10) => api.get(`/foods/user/${userId}?page=${page}&size=${size}`),
   getTop: (limit = 10) => api.get(`/foods/top?limit=${limit}`)
 }
@@ -60,6 +61,7 @@ export const uploadAPI = {
 export const adminAPI = {
   getUsers: (page = 0, size = 10) => api.get(`/admin/users?page=${page}&size=${size}`),
   deleteUser: (userId) => api.delete(`/admin/users/${userId}`),
+  updateUserRole: (userId, role) => api.put(`/admin/users/${userId}/role`, { role }),
   getAllFoods: (page = 0, size = 10) => api.get(`/admin/foods?page=${page}&size=${size}`),
   deleteFood: (foodId) => api.delete(`/admin/foods/${foodId}`),
   getPendingFoods: (page = 0, size = 10) => api.get(`/admin/foods/pending?page=${page}&size=${size}`),
@@ -77,6 +79,14 @@ export const recommendationAPI = {
   getTastePreferences: () => api.get('/recommendations/taste-preferences'),
   updateTastePreferences: (data) => api.put('/recommendations/taste-preferences', data),
   chat: (data) => api.post('/recommendations/chat', data)
+}
+
+export const shopAPI = {
+  getMyShop: () => api.get('/shops/my'),
+  getAll: () => api.get('/shops'),
+  getById: (id) => api.get(`/shops/${id}`),
+  createShop: (data) => api.post('/shops', data),
+  updateShop: (id, data) => api.put(`/shops/${id}`, data)
 }
 
 export default api

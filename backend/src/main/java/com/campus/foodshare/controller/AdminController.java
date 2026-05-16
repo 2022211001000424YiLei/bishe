@@ -7,6 +7,7 @@ import com.campus.foodshare.entity.Comment;
 import com.campus.foodshare.entity.SiteSetting;
 import com.campus.foodshare.entity.User;
 import com.campus.foodshare.repository.*;
+import com.campus.foodshare.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,7 @@ public class AdminController {
     private final SiteSettingRepository siteSettingRepository;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
+    private final FoodService foodService;
 
     @GetMapping("/users")
     public ResponseEntity<Page<UserResponse>> getAllUsers(
@@ -58,8 +60,8 @@ public class AdminController {
     }
 
     @DeleteMapping("/foods/{foodId}")
-    public ResponseEntity<Void> deleteFood(@PathVariable Long foodId) {
-        foodRepository.deleteById(foodId);
+    public ResponseEntity<Void> deleteFood(@PathVariable Long foodId, @AuthenticationPrincipal User user) {
+        foodService.deleteFood(foodId, user.getId(), user.getRole());
         return ResponseEntity.ok().build();
     }
 
@@ -156,6 +158,30 @@ public class AdminController {
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
         commentRepository.deleteById(commentId);
+        return ResponseEntity.ok().build();
+    }
+
+    // ========== 商家管理 ==========
+
+    // 获取所有商家（角色为MERCHANT的用户及其店铺）
+    @GetMapping("/merchants")
+    public ResponseEntity<?> getMerchants() {
+        return ResponseEntity.ok(null); // TODO: 实现商家列表
+    }
+
+    // 修改用户角色
+    @PutMapping("/users/{userId}/role")
+    public ResponseEntity<?> updateUserRole(
+            @PathVariable Long userId,
+            @RequestBody Map<String, String> request) {
+        String role = request.get("role");
+        if (role == null || (!role.equals("USER") && !role.equals("MERCHANT") && !role.equals("ADMIN"))) {
+            throw new RuntimeException("无效的角色");
+        }
+        userRepository.findById(userId).ifPresent(user -> {
+            user.setRole(role);
+            userRepository.save(user);
+        });
         return ResponseEntity.ok().build();
     }
 }

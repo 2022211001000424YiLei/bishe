@@ -27,6 +27,9 @@ public class Food {
     @Column(length = 50)
     private String category;
 
+    @Column(length = 200)
+    private String tags;
+
     @Column(name = "price")
     private Double price;
 
@@ -42,6 +45,10 @@ public class Food {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
