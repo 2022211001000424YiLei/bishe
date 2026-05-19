@@ -21,18 +21,6 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     @Query("SELECT f.category, COUNT(f) FROM Food f WHERE f.status = 'APPROVED' GROUP BY f.category")
     List<Object[]> countByStatusGroupByCategory();
 
-    @Query("SELECT f FROM Food f WHERE f.category = :category")
-    Page<Food> findByCategory(@Param("category") String category, Pageable pageable);
-
-    @Query("SELECT f FROM Food f WHERE f.title LIKE %:keyword% OR f.description LIKE %:keyword% OR f.location LIKE %:keyword%")
-    Page<Food> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
-
-    @Query("SELECT f FROM Food f ORDER BY f.likeCount DESC")
-    List<Food> findTopByLikes(Pageable pageable);
-
-    @Query("SELECT f FROM Food f ORDER BY f.createdAt DESC")
-    Page<Food> findLatest(Pageable pageable);
-
     @Query("SELECT f FROM Food f WHERE f.status = 'APPROVED' ORDER BY f.createdAt DESC")
     Page<Food> findApproved(Pageable pageable);
 

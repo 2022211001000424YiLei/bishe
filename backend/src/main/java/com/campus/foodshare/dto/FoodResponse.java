@@ -14,7 +14,6 @@ public class FoodResponse {
     private String category;
     private String tags;
     private Double price;
-    private Double rating;
     private Integer likeCount;
     private Integer viewCount;
     private String status;
@@ -37,7 +36,6 @@ public class FoodResponse {
         response.setCategory(food.getCategory());
         response.setTags(food.getTags());
         response.setPrice(food.getPrice());
-        response.setRating(food.getRating());
         response.setLikeCount(food.getLikeCount());
         response.setViewCount(food.getViewCount());
         response.setStatus(food.getStatus());

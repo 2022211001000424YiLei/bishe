@@ -23,11 +23,4 @@ public class LikeController {
         return ResponseEntity.ok(Map.of("liked", liked));
     }
 
-    @GetMapping
-    public ResponseEntity<Map<String, Boolean>> isLiked(
-            @PathVariable Long foodId,
-            @AuthenticationPrincipal User user) {
-        boolean liked = likeService.isLiked(foodId, user.getId());
-        return ResponseEntity.ok(Map.of("liked", liked));
     }
-}

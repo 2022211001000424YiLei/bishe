@@ -54,8 +54,4 @@ public class FavoriteService {
             return response;
         });
     }
-
-    public boolean isFavorited(Long foodId, Long userId) {
-        return favoriteRepository.existsByUserIdAndFoodId(userId, foodId);
-    }
 }

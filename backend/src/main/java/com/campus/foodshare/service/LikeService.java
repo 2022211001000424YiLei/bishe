@@ -40,8 +40,4 @@ public class LikeService {
         foodRepository.save(food);
         return !exists;
     }
-
-    public boolean isLiked(Long foodId, Long userId) {
-        return likeRepository.existsByUserIdAndFoodId(userId, foodId);
-    }
 }

@@ -56,8 +56,4 @@ public class UserService {
         }
         return UserResponse.fromEntity(userRepository.save(user));
     }
-
-    public UserResponse getUserProfile(Long userId) {
-        return UserResponse.fromEntity(findById(userId));
-    }
 }

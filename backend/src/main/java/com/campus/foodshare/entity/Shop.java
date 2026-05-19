@@ -30,9 +30,6 @@ public class Shop {
     @JsonIgnore
     private User user;
 
-    @Column(name = "status", length = 20)
-    private String status = "ACTIVE";
-
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 

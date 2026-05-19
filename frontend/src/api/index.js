@@ -23,7 +23,6 @@ export const foodAPI = {
   getAll: (page = 0, size = 10) => api.get(`/foods?page=${page}&size=${size}`),
   getById: (id) => api.get(`/foods/${id}`),
   create: (data) => api.post('/foods', data),
-  update: (id, data) => api.put(`/foods/${id}`, data),
   delete: (id) => api.delete(`/foods/${id}`),
   search: (keyword, page = 0, size = 10) => api.get(`/foods/search?keyword=${keyword}&page=${page}&size=${size}`),
   getByCategory: (category, page = 0, size = 10) => api.get(`/foods/category/${category}?page=${page}&size=${size}`),
@@ -34,13 +33,11 @@ export const foodAPI = {
 
 export const commentAPI = {
   getByFood: (foodId, page = 0, size = 10) => api.get(`/foods/${foodId}/comments?page=${page}&size=${size}`),
-  add: (foodId, data) => api.post(`/foods/${foodId}/comments`, data),
-  delete: (foodId, commentId) => api.delete(`/foods/${foodId}/comments/${commentId}`)
+  add: (foodId, data) => api.post(`/foods/${foodId}/comments`, data)
 }
 
 export const likeAPI = {
-  toggle: (foodId) => api.post(`/foods/${foodId}/like`),
-  check: (foodId) => api.get(`/foods/${foodId}/like`)
+  toggle: (foodId) => api.post(`/foods/${foodId}/like`)
 }
 
 export const favoriteAPI = {
@@ -67,24 +64,18 @@ export const adminAPI = {
   getPendingFoods: (page = 0, size = 10) => api.get(`/admin/foods/pending?page=${page}&size=${size}`),
   approveFood: (foodId) => api.post(`/admin/foods/${foodId}/approve`),
   rejectFood: (foodId) => api.post(`/admin/foods/${foodId}/reject`),
-  getSettings: () => api.get('/admin/settings'),
-  updateSettings: (settings) => api.put('/admin/settings', settings),
   getStatistics: () => api.get('/admin/statistics'),
   getComments: (page = 0, size = 20) => api.get(`/admin/comments?page=${page}&size=${size}`),
   deleteComment: (commentId) => api.delete(`/admin/comments/${commentId}`)
 }
 
 export const recommendationAPI = {
-  getRecommendations: () => api.get('/recommendations'),
-  getTastePreferences: () => api.get('/recommendations/taste-preferences'),
-  updateTastePreferences: (data) => api.put('/recommendations/taste-preferences', data),
   chat: (data) => api.post('/recommendations/chat', data)
 }
 
 export const shopAPI = {
   getMyShop: () => api.get('/shops/my'),
   getAll: () => api.get('/shops'),
-  getById: (id) => api.get(`/shops/${id}`),
   createShop: (data) => api.post('/shops', data),
   updateShop: (id, data) => api.put(`/shops/${id}`, data)
 }

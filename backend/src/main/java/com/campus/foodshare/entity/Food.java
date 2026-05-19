@@ -33,9 +33,6 @@ public class Food {
     @Column(name = "price")
     private Double price;
 
-    @Column(name = "rating")
-    private Double rating = 0.0;
-
     @Column(name = "like_count")
     private Integer likeCount = 0;
 

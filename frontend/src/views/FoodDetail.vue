@@ -84,7 +84,6 @@ const food = ref(null)
 const comments = ref({ content: [], totalElements: 0 })
 const newComment = ref('')
 const token = localStorage.getItem('token')
-const currentUserId = localStorage.getItem('userId')
 
 const loadFood = async () => {
   try {

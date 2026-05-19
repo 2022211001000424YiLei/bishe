@@ -7,7 +7,6 @@ import java.util.Optional;
 public interface LikeRepository extends JpaRepository<Like, Long> {
     Optional<Like> findByUserIdAndFoodId(Long userId, Long foodId);
     boolean existsByUserIdAndFoodId(Long userId, Long foodId);
-    long countByFoodId(Long foodId);
     void deleteByUserIdAndFoodId(Long userId, Long foodId);
     void deleteByFoodId(Long foodId);
 }

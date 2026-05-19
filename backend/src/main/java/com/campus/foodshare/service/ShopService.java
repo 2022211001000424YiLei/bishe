@@ -28,24 +28,6 @@ public class ShopService {
         shop.setImageUrl(imageUrl);
         shop.setAddress(address);
         shop.setUser(user);
-        shop.setStatus("ACTIVE");
-
-        return shopRepository.save(shop);
-    }
-
-    @Transactional
-    public Shop updateShop(Long userId, String name, String description, String imageUrl, String address) {
-        List<Shop> shops = shopRepository.findByUserId(userId);
-        if (shops.isEmpty()) {
-            throw new RuntimeException("商家不存在");
-        }
-        Shop shop = shops.get(0);
-
-        if (name != null) shop.setName(name);
-        if (description != null) shop.setDescription(description);
-        if (imageUrl != null) shop.setImageUrl(imageUrl);
-        if (address != null) shop.setAddress(address);
-        shop.setUpdatedAt(LocalDateTime.now());
 
         return shopRepository.save(shop);
     }
@@ -63,15 +45,9 @@ public class ShopService {
         shop.setImageUrl(imageUrl);
         shop.setAddress(address);
         shop.setUser(user);
-        shop.setStatus("ACTIVE");
         shop.setUpdatedAt(LocalDateTime.now());
 
         return shopRepository.save(shop);
-    }
-
-    public Shop getShopByUserId(Long userId) {
-        List<Shop> shops = shopRepository.findByUserId(userId);
-        return shops.isEmpty() ? null : shops.get(0);
     }
 
     public List<Shop> getShopsByUserId(Long userId) {

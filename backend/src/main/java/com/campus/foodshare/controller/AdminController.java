@@ -4,6 +4,7 @@ import com.campus.foodshare.dto.CommentResponse;
 import com.campus.foodshare.dto.FoodResponse;
 import com.campus.foodshare.dto.UserResponse;
 import com.campus.foodshare.entity.Comment;
+import com.campus.foodshare.entity.Shop;
 import com.campus.foodshare.entity.SiteSetting;
 import com.campus.foodshare.entity.User;
 import com.campus.foodshare.repository.*;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,6 +27,7 @@ import java.util.Map;
 public class AdminController {
     private final UserRepository userRepository;
     private final FoodRepository foodRepository;
+    private final ShopRepository shopRepository;
     private final SiteSettingRepository siteSettingRepository;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
@@ -166,7 +169,18 @@ public class AdminController {
     // 获取所有商家（角色为MERCHANT的用户及其店铺）
     @GetMapping("/merchants")
     public ResponseEntity<?> getMerchants() {
-        return ResponseEntity.ok(null); // TODO: 实现商家列表
+        List<User> merchants = userRepository.findByRole("MERCHANT");
+        List<Map<String, Object>> result = merchants.stream().map(merchant -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", merchant.getId());
+            map.put("username", merchant.getUsername());
+            map.put("email", merchant.getEmail());
+            map.put("createdAt", merchant.getCreatedAt());
+            List<Shop> shops = shopRepository.findByUserId(merchant.getId());
+            map.put("shops", shops);
+            return map;
+        }).toList();
+        return ResponseEntity.ok(result);
     }
 
     // 修改用户角色
