@@ -41,7 +41,7 @@
               <span class="menu-icon">👥</span>
               <span>用户列表</span>
             </a>
-            <a class="menu-item" :class="{ active: currentView === 'merchants' }" @click="currentView = 'merchants'">
+            <a class="menu-item" :class="{ active: currentView === 'merchants' }" @click="switchToMerchants">
               <span class="menu-icon">🏪</span>
               <span>商家管理</span>
             </a>
@@ -284,27 +284,27 @@
           <div v-if="currentView === 'merchants'" class="view-merchants">
             <div class="content-card">
               <div class="card-header">
-                <h3>商家列表</h3>
+                <h3>店铺列表</h3>
               </div>
               <div class="card-body">
                 <table class="data-table">
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>用户名</th>
-                      <th>邮箱</th>
-                      <th>店铺</th>
+                      <th>店铺名称</th>
+                      <th>地址</th>
+                      <th>商家</th>
                       <th>操作</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="user in merchants" :key="user.id">
-                      <td>{{ user.id }}</td>
-                      <td>{{ user.username }}</td>
-                      <td>{{ user.email }}</td>
-                      <td>{{ user.shopName || '-' }}</td>
+                    <tr v-for="shop in merchantShops" :key="shop.id">
+                      <td>{{ shop.id }}</td>
+                      <td>{{ shop.name }}</td>
+                      <td>{{ shop.address || '-' }}</td>
+                      <td>{{ shop.username }}</td>
                       <td>
-                        <button class="btn-default btn-sm" @click="changeRole(user)">改为用户</button>
+                        <button class="btn-danger btn-sm" @click="deleteShop(shop.id)">删除</button>
                       </td>
                     </tr>
                   </tbody>
@@ -485,6 +485,7 @@ const stats = ref({})
 const pendingFoods = ref([])
 const users = ref([])
 const merchants = ref([])
+const merchantShops = ref([])
 const foods = ref([])
 const comments = ref([])
 const pendingCount = ref(0)
@@ -542,6 +543,32 @@ const loadUsers = async () => {
   } catch (e) {
     console.error('加载用户失败', e)
   }
+}
+
+const loadMerchantShops = async () => {
+  try {
+    const res = await adminAPI.getMerchants()
+    const data = res.data || []
+    merchantShops.value = data.flatMap(m => (m.shops || []).map(s => ({ ...s, username: m.username })))
+  } catch (e) {
+    console.error('加载店铺失败', e)
+  }
+}
+
+const deleteShop = async (shopId) => {
+  if (!confirm('确定删除该店铺？')) return
+  try {
+    await adminAPI.deleteShop(shopId)
+    showToast('删除成功')
+    loadMerchantShops()
+  } catch (e) {
+    showToast('删除失败', 'error')
+  }
+}
+
+const switchToMerchants = () => {
+  currentView.value = 'merchants'
+  loadMerchantShops()
 }
 
 const loadFoods = async () => {

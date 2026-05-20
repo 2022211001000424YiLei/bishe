@@ -198,4 +198,11 @@ public class AdminController {
         });
         return ResponseEntity.ok().build();
     }
+
+    // 删除店铺
+    @DeleteMapping("/shops/{shopId}")
+    public ResponseEntity<Void> deleteShop(@PathVariable Long shopId) {
+        shopRepository.deleteById(shopId);
+        return ResponseEntity.ok().build();
+    }
 }

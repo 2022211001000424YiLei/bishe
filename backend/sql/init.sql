@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS foods (
     category VARCHAR(50) COMMENT '分类',
     tags VARCHAR(200) COMMENT '标签',
     price DOUBLE COMMENT '价格（用户主观定价）',
-    rating DOUBLE DEFAULT 0.0 COMMENT '评分',
     like_count INT DEFAULT 0 COMMENT '点赞数',
     view_count INT DEFAULT 0 COMMENT '浏览数',
     user_id BIGINT NOT NULL COMMENT '发布用户ID',
@@ -112,7 +111,6 @@ CREATE TABLE IF NOT EXISTS shops (
     image_url VARCHAR(500) COMMENT '店铺图片URL',
     address VARCHAR(200) COMMENT '店铺地址',
     user_id BIGINT NOT NULL COMMENT '所属商家用户ID',
-    status VARCHAR(20) DEFAULT 'ACTIVE' COMMENT '状态: ACTIVE-营业中, INACTIVE-歇业',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

@@ -66,7 +66,9 @@ export const adminAPI = {
   rejectFood: (foodId) => api.post(`/admin/foods/${foodId}/reject`),
   getStatistics: () => api.get('/admin/statistics'),
   getComments: (page = 0, size = 20) => api.get(`/admin/comments?page=${page}&size=${size}`),
-  deleteComment: (commentId) => api.delete(`/admin/comments/${commentId}`)
+  deleteComment: (commentId) => api.delete(`/admin/comments/${commentId}`),
+  getMerchants: () => api.get('/admin/merchants'),
+  deleteShop: (shopId) => api.delete(`/admin/shops/${shopId}`)
 }
 
 export const recommendationAPI = {
